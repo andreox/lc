@@ -1,21 +1,38 @@
 class Solution {
     
     ArrayList<String> permutations_list ;
+    int i ;
+    int len_str ;
     public List<String> generateParenthesis(int n) {
         
+        i = 0 ;
+        len_str = n*2;
         permutations_list = new ArrayList<String>() ;
-        System.out.println(findAllDistinctPaths(n-1,n)) ;
-        return new ArrayList<String>() ;
+        findAllDistinctPaths(permutations_list,new StringBuilder(),n-1,n,false) ;
+        
+        return permutations_list ;
+        
     }
     
-    public int findAllDistinctPaths( int remainingOpen, int remainingClose, boolean isClose ) {
+    public void findAllDistinctPaths(List<String> answer, StringBuilder cur_string, int remainingOpen, int remainingClose, boolean isClose ) {
         
-        if ( remainingOpen == 0 && remainingClose == 0 ) return 1 ;
         
-        else if ( (remainingClose < remainingOpen) || (remainingOpen < 0 && remainingClose > 0) || (remainingOpen > 0 && remainingClose < 0) ) return 0 ;
+        if ( (remainingClose < remainingOpen) || remainingOpen < 0 ) return ;
         
-        return (findAllDistinctPaths(remainingOpen-1,remainingClose)+findAllDistinctPaths(remainingOpen,remainingClose-1)) ;
+        if ( isClose ) cur_string.append(")") ;
+        else cur_string.append("(") ;
+        i++ ;
+        if ( cur_string.length() == len_str ) {
+            answer.add(cur_string.toString()) ;
+            
+        }
+        
+        findAllDistinctPaths(permutations_list,cur_string,remainingOpen-1,remainingClose,false) ;        
+        findAllDistinctPaths(permutations_list,cur_string,remainingOpen,remainingClose-1,true) ;
+        cur_string.deleteCharAt(cur_string.length()-1) ;
         
     }
     
 }
+
+//finally working solution. O(2^(2n-0.5))

@@ -16,12 +16,15 @@
 class FindElements {
 
     TreeNode recoveredRoot ;
-    
+    Set<Integer> treeValues ;
     public FindElements(TreeNode root) {
         
         recoveredRoot = root ;
         Queue<TreeNode> visitTree = new LinkedList<>() ;
+        treeValues = new HashSet<>() ;
+        
         recoveredRoot.val = 0 ;
+        treeValues.add(0) ;
         visitTree.add(recoveredRoot) ;
         
         while ( !visitTree.isEmpty() ) {
@@ -29,11 +32,13 @@ class FindElements {
             TreeNode tmp = visitTree.remove() ;
             if ( tmp.left != null ) {
                 tmp.left.val = 2*tmp.val +1 ;
+                treeValues.add(tmp.left.val) ;
                 visitTree.add(tmp.left) ;
             }
             
             if ( tmp.right != null ) {
                 tmp.right.val = 2*tmp.val+2 ;
+                treeValues.add(tmp.right.val) ;
                 visitTree.add(tmp.right) ;
                 
             }
@@ -42,20 +47,7 @@ class FindElements {
     
     public boolean find(int target) {
         
-        Queue<TreeNode> visitTree = new LinkedList<>() ;
-        visitTree.add(recoveredRoot) ;
-        
-        while ( !visitTree.isEmpty() ) {
-            
-            TreeNode tmp = visitTree.remove() ;
-            if ( tmp.val == target ) return true ;
-            
-            if ( tmp.left != null ) visitTree.add(tmp.left) ;
-            if ( tmp.right != null ) visitTree.add(tmp.right) ;
-            
-        }
-        
-        return false ;
+        return treeValues.contains(target) ;
     }
 }
 
